@@ -5,6 +5,7 @@ from tweets.text_processing import process_text, vader
 
 logger = logging.getLogger(__name__)
 
+
 def create_connection(db_file):
     """ create a database connection to the SQLite database
         specified by db_file
@@ -79,7 +80,11 @@ def create_tweets_tables(db_name):
         # create tweets table
         create_table(conn, sql_create_tweets_table)
 
-        logger.info("Tables tweets and places have been created in the database {}".format(db_name))
+        logger.info(
+            "Tables tweets and places have been created in the database {}".format(
+                db_name
+            )
+        )
 
     else:
         logger.warning("Error! cannot create the database connection.")
@@ -108,8 +113,10 @@ def create_tweet(conn, tweet):
     :return:
     """
 
-    sql = """ INSERT OR IGNORE INTO tweets(tweet_id,author_id,created_at,tweet_text,simple_text,vader_pos,vader_neg,vader_neu,vader_comp,lang,place_id,like_count,quote_count,reply_count,retweet_count,referenced_tweet,referenced_type)
-              VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) """
+    sql = """ INSERT OR IGNORE INTO tweets(tweet_id,author_id,created_at,tweet_text,simple_text,
+            vader_pos,vader_neg,vader_neu,vader_comp,lang,place_id,like_count,quote_count,
+            reply_count,retweet_count,referenced_tweet,referenced_type)
+            VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) """
     cur = conn.cursor()
     cur.execute(sql, tweet)
     conn.commit()
@@ -149,7 +156,7 @@ def add_tweet_json(data, db_name):
                     vader_sentiment["pos"],
                     vader_sentiment["neg"],
                     vader_sentiment["neu"],
-                    vader_sentiment["compound"],                    
+                    vader_sentiment["compound"],
                     tweet["lang"],
                     tweet["geo"]["place_id"],
                     tweet["public_metrics"]["like_count"],
@@ -169,7 +176,7 @@ def add_tweet_json(data, db_name):
                     vader_sentiment["pos"],
                     vader_sentiment["neg"],
                     vader_sentiment["neu"],
-                    vader_sentiment["compound"],       
+                    vader_sentiment["compound"],
                     tweet["lang"],
                     tweet["geo"]["place_id"],
                     tweet["public_metrics"]["like_count"],
@@ -182,7 +189,11 @@ def add_tweet_json(data, db_name):
 
             create_tweet(conn=conn, tweet=new_tweet)
 
-    logger.info("Processed {} tweets and {} places.".format(len(data["data"]), len(data["includes"]["places"])))
+    logger.info(
+        "Processed {} tweets and {} places.".format(
+            len(data["data"]), len(data["includes"]["places"])
+        )
+    )
 
 
 def get_earliest_tweet(db_name):
@@ -201,8 +212,8 @@ def get_earliest_tweet(db_name):
     )
     latest_tweet = cur.fetchone()
 
-    # Return the time 
+    # Return the time
     if latest_tweet is not None:
         return latest_tweet[0]
-    else: 
+    else:
         return None
