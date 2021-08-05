@@ -3,3 +3,5 @@
 
 .vscode
 .ipynb_checkpoints
+__pycache__
+twitter.log
