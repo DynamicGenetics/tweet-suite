@@ -1,10 +1,9 @@
 import sqlite3
 from sqlite3 import Error
 import logging
-from tweets.settings import DB_NAME
+from tweets.text_processing import process_text, vader
 
 logger = logging.getLogger(__name__)
-
 
 def create_connection(db_file):
     """ create a database connection to the SQLite database
@@ -53,6 +52,11 @@ def create_tweets_tables(db_name):
                                         author_id text NOT NULL,
                                         created_at text NOT NULL,
                                         tweet_text text NOT NULL,
+                                        simple_text text,
+                                        vader_pos real,
+                                        vader_neg real,
+                                        vader_neu real,
+                                        vader_comp real,
                                         lang text,
                                         place_id text,
                                         like_count integer,
@@ -104,8 +108,8 @@ def create_tweet(conn, tweet):
     :return:
     """
 
-    sql = """ INSERT OR IGNORE INTO tweets(tweet_id,author_id,created_at,tweet_text,lang,place_id,like_count,quote_count,reply_count,retweet_count,referenced_tweet,referenced_type)
-              VALUES(?,?,?,?,?,?,?,?,?,?,?,?) """
+    sql = """ INSERT OR IGNORE INTO tweets(tweet_id,author_id,created_at,tweet_text,simple_text,vader_pos,vader_neg,vader_neu,vader_comp,lang,place_id,like_count,quote_count,reply_count,retweet_count,referenced_tweet,referenced_type)
+              VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) """
     cur = conn.cursor()
     cur.execute(sql, tweet)
     conn.commit()
@@ -134,13 +138,18 @@ def add_tweet_json(data, db_name):
             create_place(conn=conn, place=new_place)
 
         for tweet in data["data"]:
-
+            vader_sentiment = vader(tweet["text"])
             try:
                 new_tweet = (
                     tweet["id"],
                     tweet["author_id"],
                     tweet["created_at"],
                     tweet["text"],
+                    process_text(tweet["text"]),
+                    vader_sentiment["pos"],
+                    vader_sentiment["neg"],
+                    vader_sentiment["neu"],
+                    vader_sentiment["compound"],                    
                     tweet["lang"],
                     tweet["geo"]["place_id"],
                     tweet["public_metrics"]["like_count"],
@@ -156,6 +165,11 @@ def add_tweet_json(data, db_name):
                     tweet["author_id"],
                     tweet["created_at"],
                     tweet["text"],
+                    process_text(tweet["text"]),
+                    vader_sentiment["pos"],
+                    vader_sentiment["neg"],
+                    vader_sentiment["neu"],
+                    vader_sentiment["compound"],       
                     tweet["lang"],
                     tweet["geo"]["place_id"],
                     tweet["public_metrics"]["like_count"],
