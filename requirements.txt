@@ -3,3 +3,4 @@ searchtweets-v2
 sqlite3
 json
 vaderSentiment
+schedule

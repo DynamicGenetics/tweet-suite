@@ -196,9 +196,9 @@ def add_tweet_json(data, db_name):
     )
 
 
-def get_earliest_tweet(db_name):
+def get_latest_tweet(db_name):
     """
-    Query to get the last tweet in the db.
+    Query to get the most recent tweet in the db.
     :param db_name: name of the db to connect to
     """
 
@@ -207,9 +207,7 @@ def get_earliest_tweet(db_name):
     cur = conn.cursor()
 
     # Run a query to get the time of the latest ID from the tweets in the database
-    cur.execute(
-        "SELECT created_at FROM tweets WHERE ID = (SELECT MAX(ID) FROM tweets);"
-    )
+    cur.execute("SELECT tweet_id, MAX(created_at) FROM tweets;")
     latest_tweet = cur.fetchone()
 
     # Return the time
