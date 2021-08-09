@@ -26,7 +26,6 @@ def bearer_oauth(r):
 @retry(Exception, tries=3, delay=3, backoff=5)
 def connect_to_endpoint(url, params):
     response = requests.request("GET", search_url, auth=bearer_oauth, params=params)
-    print(response.text)
     if response.status_code == 429:
         raise Exception("Rate limited")
     if response.status_code != 200:
@@ -55,15 +54,16 @@ def start_time(db_name):
 
     # If there is no latest tweet then we need 7 days of data.
     if latest_tweet is None:
-        start_time = (yesterday - timedelta(weeks=1)).strftime(
-            "%Y-%m-%dT%l:%M:%S"
-        ) + "Z"
+        # Set start time as midnight yesterday minus one week
+        start_time = (yesterday() - timedelta(weeks=1)).strftime("%Y-%m-%dT") + (
+            "23:59:00Z"
+        )
         logger.info(
             "First run of scheduler - will collect 7 days of tweets since {}".format(
                 start_time
             )
         )
-    else:  # Otherwise, set the start time as the most recent date.
+    else:  # Otherwise, set the start time as the most recent date in the database
         start_time = latest_tweet
         logger.info("Updated start time is set as {}".format(start_time))
 
@@ -71,17 +71,16 @@ def start_time(db_name):
 
 
 def yesterday():
-    """Get the datetime string for 11.59 yesterday"""
+    """Get the datetime for yesterday"""
 
-    yesterday = datetime.now().date() - timedelta(days=1)
-    yest_dt = yesterday.strftime("%Y-%m-%dT") + ("23:59Z")
+    return datetime.now().date() - timedelta(days=1)
 
 
 def get_tweets(db_name):
 
     start = start_time(db_name)
     # The end time must be at least 10 seconds before the request time, so take 30 seconds.
-    end = (datetime.now() - timedelta(minutes=1)).strftime("%Y-%m-%dT%l:%M:%S") + "Z"
+    end = yesterday().strftime("%Y-%m-%dT") + ("23:59:00Z")
 
     # Get the tweets between the start time we've set and now.
     query = {
@@ -94,11 +93,8 @@ def get_tweets(db_name):
         "max_results": 500,
     }
 
-    print(query)
-
-    logger.info("Fetching tweets between {} and {}".format(start, end))
-
     # Now, pass this query to the function that actually fetches the data.
     fetch_twitter_data(query, db_name)
 
     logger.info("Tweets successfully collected.")
+
