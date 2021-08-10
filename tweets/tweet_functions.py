@@ -45,10 +45,10 @@ class FullArchiveSearch:
         self.database.add_tweet_json(json_response)
 
         # Whilst there is a next token option in the response, paginate through.
-        # while "next_token" in json_response["meta"]:
-        #     query_params["next_token"] = json_response["meta"]["next_token"]
-        #     json_response = self.connect_to_endpoint(query_params)
-        #     self.database.add_tweet_json(json_response)
+        while "next_token" in json_response["meta"]:
+            query_params["next_token"] = json_response["meta"]["next_token"]
+            json_response = self.connect_to_endpoint(query_params)
+            self.database.add_tweet_json(json_response)
 
     def start_time(self):
         """Get the time that the query needs to start from."""

@@ -63,7 +63,7 @@ class Database:
                                         place_type text
                                     );"""
 
-        sql_create_tweets_table = """ CREATE TABLE IF NOT EXISTS tweets (
+        sql_create_tweets_table = """CREATE TABLE IF NOT EXISTS tweets (
                                         id integer PRIMARY KEY,
                                         added TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
                                         tweet_id integer UNIQUE,
@@ -86,15 +86,15 @@ class Database:
                                         FOREIGN KEY (place_id) REFERENCES places (id)
                                     ); """
 
-        sql_create_matchedplaces_table = """ CREATE TABLE IF NOT EXISTS matchedplaces (
+        sql_create_matchedplaces_table = """CREATE TABLE IF NOT EXISTS matchedplaces (
                                         id integer PRIMARY KEY,
                                         added TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
-                                        place_id text NOT NULL,
-                                        lsoa text NOT NULL,
+                                        place_id text UNIQUE,
+                                        lsoa text,
                                         msoa text,
                                         lhb text,
                                         lsoa_match real,
-                                        FORGEIGN KEY (place_id) REFERENCES places (id)
+                                        FOREIGN KEY (place_id) REFERENCES places (id)
                                     ); """
 
         # create a database connection

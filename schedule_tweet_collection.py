@@ -20,7 +20,5 @@ logger = logging.getLogger(__name__)
 logger.info("Starting scheduler...")
 # schedule.every().day.at("12:40").do(get_tweets(DB_NAME))
 
-Database("phw_tweets2.db")
-
-# FullArchiveSearch().get_tweets()
+FullArchiveSearch(Database("phw_tweets.db")).get_tweets()
 
