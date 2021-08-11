@@ -68,7 +68,7 @@ class FullArchiveSearch:
                 )
             )
         else:  # Otherwise, set the start time as the most recent date in the database
-            start_time = latest_tweet
+            start_time = latest_tweet[1]
             logger.info("Updated start time is set as {}".format(start_time))
 
         return start_time

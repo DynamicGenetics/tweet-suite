@@ -2,6 +2,8 @@ import sqlite3
 from sqlite3 import Error
 import logging
 import os
+import pandas as pd
+
 from tweets.text_processing import process_text, vader
 
 logger = logging.getLogger(__name__)
@@ -91,8 +93,7 @@ class Database:
                                         added TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
                                         place_id text UNIQUE,
                                         lsoa text,
-                                        msoa text,
-                                        lhb text,
+                                        lsoa_name text,
                                         lsoa_match real,
                                         FOREIGN KEY (place_id) REFERENCES places (id)
                                     ); """
@@ -232,7 +233,51 @@ class Database:
         latest_tweet = cur.fetchone()
 
         # Return the time
-        if latest_tweet is not None:
-            return latest_tweet[0]
-        else:
+        if latest_tweet[0] is None:
             return None
+        else:
+            return latest_tweet
+
+    def get_unmatched_places(self):
+        """Returns a pandas dataframe of all the places that
+        aren't matched in the matchedplaces table."""
+
+        # Query to return the info of all places without a matchedplace
+        sql = """SELECT places.id,places.geo_bbox,places.full_name FROM places 
+                    LEFT JOIN matchedplaces ON places.id = matchedplaces.place_id 
+                    WHERE matchedplaces.place_id IS NULL;"""
+
+        # create a database connection
+        conn = self.create_connection()
+
+        return pd.read_sql(sql, conn)
+
+    def write_matched_places(self, matchedplaces):
+        """Collect the matched places and write them back to the database"""
+
+        # Get just the cols we want
+        data = pd.concat(
+            [
+                matchedplaces["id"],
+                matchedplaces["lad19cd"],
+                matchedplaces["lad19nm"],
+                matchedplaces["likelihood"],
+            ],
+            axis=1,
+            keys=["place_id", "lsoa", "lsoa_name", "lsoa_match"],
+        )
+
+        # create a database connection
+        conn = self.create_connection()
+
+        # Write these to the db
+        data.to_sql(
+            name="matchedplaces", con=conn, if_exists="append", index=False,
+        )
+
+        logger.info(
+            "Total of {} newly matched places written to matchplaces table.".format(
+                data.shape[0]
+            )
+        )
+
