@@ -114,8 +114,9 @@ class MatchPlaces:
 
         Parameters
         ----------
-        polygon: Polygon
-            Shapley Polygon object enclosing the tweet bounding box
+        geo_obj: Polygon or Point
+            Shapley Polygon object enclosing the tweet bounding box or
+            specific co-ordinate Point.
             
         Returns
         -------
@@ -132,17 +133,32 @@ class MatchPlaces:
 
         # Intersection over the union is a measure of how exactly the bounding box
         # and the la overlap
-        laoi["iou"] = self.la_keys["geometry"].apply(
-            lambda g: g.intersection(geo_obj).area / g.union(geo_obj).area
-        )
+        if type(geo_obj) == Polygon:
+            laoi["iou"] = self.la_keys["geometry"].apply(
+                lambda g: g.intersection(geo_obj).area / g.union(geo_obj).area
+            )
 
-        # Pop weight is the proportion of the la population covered by the bounding box.
-        laoi["pop_weight"] = (
-            laoi["geometry"].apply(lambda g: (g.intersection(geo_obj).area / g.area))
-            * laoi["population_count"]
-        )
-        # The final likelihood is the IoU multiplied by the population weight
-        laoi["likelihood"] = laoi["iou"] * laoi["pop_weight"]
+            # Pop weight is the proportion of the la population covered by the bounding box.
+            laoi["pop_weight"] = (
+                laoi["geometry"].apply(
+                    lambda g: (g.intersection(geo_obj).area / g.area)
+                )
+                * laoi["population_count"]
+            )
+            # The final likelihood is the IoU multiplied by the population weight
+            laoi["likelihood"] = laoi["iou"] * laoi["pop_weight"]
+
+        elif type(geo_obj) == Point:
+            # This will result in True/False, so directly set this as the Likelihood.
+            print("Searching for point now")
+
+            laoi["likelihood"] = self.la_keys["geometry"].apply(
+                lambda g: g.contains(geo_obj)
+            )
+
+        else:
+            raise TypeError("Type of geo_obj not recognised")
+
         # Sort dataframe by highest to lowest
         laoi = laoi.sort_values(by="likelihood", ascending=False)
 
