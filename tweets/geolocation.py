@@ -104,6 +104,13 @@ class MatchPlaces:
         data["lad19nm"] = matchings.apply(lambda c: get_index(c, 1))
         data["likelihood"] = matchings.apply(lambda c: get_index(c, 2))
 
+        # One problem is that Wales gets geo-located to a LA (usualy Powys) even though
+        # it's larger than them all. We need to filter it out.
+        m = data["full_name"] == "Wales, United Kingdom"
+        data.loc[m, "lad19cd"] = None
+        data.loc[m, "lad19nm"] = None
+        data.loc[m, "likelihood"] = None
+
         return data
 
     def match_local_authority(self, geo_obj):
@@ -150,8 +157,6 @@ class MatchPlaces:
 
         elif type(geo_obj) == Point:
             # This will result in True/False, so directly set this as the Likelihood.
-            print("Searching for point now")
-
             laoi["likelihood"] = self.la_keys["geometry"].apply(
                 lambda g: g.contains(geo_obj)
             )
