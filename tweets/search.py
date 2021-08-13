@@ -1,3 +1,17 @@
+"""Module containing FullArchiveSearch class which controls access to
+the Twitter Full Archive Search API. 
+
+Requires an environment variable with a bearer token called 
+`SEARCHTWEETS_BEARER_TOKEN`.
+
+It will search with the query defined in FullArchiveSearch.get_tweets()
+which dynamically updates the dates of the search so the end time is 
+always 23.59 yesterday.
+
+The start datetime will be 7 days previous if it is running for the first
+time, otherwise it will be the time of the most recent tweet.
+"""
+
 import requests
 import os
 from retry import retry
@@ -7,7 +21,7 @@ from datetime import datetime, timedelta
 
 logger = logging.getLogger(__name__)
 
-from tweets.db_functions import Database
+from tweets.database import Database
 
 
 class FullArchiveSearch:

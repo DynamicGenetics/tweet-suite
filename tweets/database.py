@@ -1,3 +1,10 @@
+"""Contains the Database class which controls the set up and
+access to the SQLite database where tweet data is saved.
+
+When first called it will setup the database if a database
+with the same name does not already exist. 
+"""
+
 import sqlite3
 from sqlite3 import Error
 import logging

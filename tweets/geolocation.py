@@ -1,8 +1,17 @@
+"""Contains the MatchPlaces class which will complete the process of matching
+each place in `places` to a Local Authority.
+
+Example
+-------
+>>> from tweets.database import Database
+>>> df = Database("tweets.db").get_unmatched_places()
+>>> matched = MatchPlaces(df)
+"""
+
 import pandas as pd
 import geopandas as gpd
 import logging
 import os
-import numpy as np
 from shapely.geometry import Polygon, Point
 from itertools import product
 
