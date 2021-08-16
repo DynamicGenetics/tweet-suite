@@ -1,5 +1,8 @@
 # Tweet Suite
 
+[![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
+[![DOI](https://zenodo.org/badge/393027802.svg)](https://zenodo.org/badge/latestdoi/393027802)
+
 This package, when run, will execute a query every day that collects all tweets from Wales for the past 7 days (if running for the first time), or since the last tweet collected.
 It uses Twitter's V2 API. 
 
