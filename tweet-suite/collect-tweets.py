@@ -87,7 +87,13 @@ if __name__ == "__main__":
     scheduler = SafeScheduler()
 
     try:
-        scheduler.every().day.at(args.collector_time).do(daily_job(args.db_location))
+        scheduler.every().day.at(args.collector_time).do(daily_job, args.db_location)
+
+        logger.info(
+            "Sheduler set to run every day at {}, with the database at {}".format(
+                args.collector_time, args.db_location
+            )
+        )
 
         # Sleep function
         while True:
