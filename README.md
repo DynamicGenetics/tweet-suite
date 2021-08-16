@@ -1,5 +1,15 @@
 # Tweet Suite
 
+This package, when run, will execute a query every day that collects all tweets from Wales for the past 7 days (if running for the first time), or since the last tweet collected.
+It uses Twitter's V2 API. 
+
+When run it will set up an SQLite3 database in the location specified to the main script which saves tweets, their basic information and their sentiment scores from the [VADER sentiment algorithm](https://github.com/cjhutto/vaderSentiment) in a table called `tweets`.  
+A table called `places` then saves the geo expansion information requested in the query.  
+Finally, a table called `matchedplaces` saves the result of each place matched to a Welsh local authority using an algorithm defined in the `tweets/geo.py` file. 
+
+## Authors
+This package was written by [ninadicara](https://github.com/ninadicara), [altanner](https://github.com/altanner), and [leriomaggio](https://github.com/leriomaggio). 
+
 ## Good to know
 
 ### API Tokens
@@ -10,12 +20,10 @@ the bearer token as an environment variable called `SEARCHTWEETS_BEARER_TOKEN`.
 ### Query
 Currently the query returns tweets with basic information and requests the geo expansion.  
 If you change the query you'll also need to edit the SQL tables and data entry functions. 
-These are in `tweets/db_functions.py`, called `create_tweets_tables()` and `add_tweet_json()`. 
-
-You can change the start and end date of the query in `tweets/settings.py`
+These are in `tweets/database.py`, called `create_tweets_tables()` and `add_tweet_json()`. 
 
 ### Database
-The database is SQLite3, for ease and as an alternative to CSV. The geo information from the tweets
-and the tweet data itself is in two different tables called `tweets` and `places`. 
-There is a foreign key between the place id in the `tweets` table and the id in the `places` table. 
+The database is SQLite3, for ease and as an alternative to CSV.
+The schema for the database can be seen in the setup functions as part of the `Database` class in `tweets/database.py`. 
+There is a foreign key between `place_id` in the `tweets` and `matchedplaces` tables that link to the primary `id` entry in the `places` table. 
 
