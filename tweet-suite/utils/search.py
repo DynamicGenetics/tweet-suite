@@ -21,7 +21,7 @@ from datetime import datetime, timedelta
 
 logger = logging.getLogger(__name__)
 
-from tweets.database import Database
+from utils.database import Database
 
 
 class FullArchiveSearch:
