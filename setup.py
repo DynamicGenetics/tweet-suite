@@ -10,6 +10,7 @@ setuptools.setup(
     author_email="ninadicara@protonmail.com",
     description="Collect and save daily Twitter data from Wales using Twitter's Academic API.",
     long_description=long_description,
+    long_description_content_type="text/markdown",
     url="https://github.com/ninadicara/tweet-suite",
     project_urls={"Bug Tracker": "https://github.com/ninadicara/tweet-suite/issues",},
     classifiers=[
