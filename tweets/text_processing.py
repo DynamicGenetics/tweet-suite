@@ -1,3 +1,5 @@
+"""Module containing functions used for text processing in others modules."""
+
 import re
 from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
 
