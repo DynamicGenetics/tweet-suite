@@ -6,3 +6,5 @@
 __pycache__
 twitter.log
 .DS_Store
+
+dist/
