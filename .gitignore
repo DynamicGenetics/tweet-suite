@@ -8,3 +8,4 @@ twitter.log
 .DS_Store
 
 dist/
+tweet_suite.egg-info/
