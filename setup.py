@@ -5,7 +5,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setuptools.setup(
     name="tweet-suite",
-    version="1.1.0",
+    version="1.1.1",
     author="Nina Di Cara, Alastair Tanner, Valerio Maggio",
     author_email="ninadicara@protonmail.com",
     description="Collect and save daily Twitter data from Wales using Twitter's Academic API.",
@@ -23,18 +23,12 @@ setuptools.setup(
     python_requires=">=3.6",
     install_requires=[
         "retry",
-        "os",
-        "logging",
-        "itertools",
         "geopandas",
         "sqlite3",
-        "json",
         "vaderSentiment",
         "schedule",
         "pandas",
         "shapley",
-        "datetime",
         "requests",
-        "re",
     ],
 )
