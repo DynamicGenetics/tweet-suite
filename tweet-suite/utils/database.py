@@ -11,7 +11,7 @@ import logging
 import os
 import pandas as pd
 
-from tweets.text_processing import process_text, vader
+from utils.text_processing import process_text, vader
 
 logger = logging.getLogger(__name__)
 

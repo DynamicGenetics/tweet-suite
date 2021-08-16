@@ -12,9 +12,9 @@ import traceback
 from traceback import format_exc
 from argparse import ArgumentParser
 
-from tweets.database import Database
-from tweets.search import FullArchiveSearch
-from tweets.geolocation import MatchPlaces
+from utils.database import Database
+from utils.search import FullArchiveSearch
+from utils.geolocation import MatchPlaces
 
 # Set up logging
 logging.basicConfig(
