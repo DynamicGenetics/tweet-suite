@@ -27,3 +27,8 @@ The database is SQLite3, for ease and as an alternative to CSV.
 The schema for the database can be seen in the setup functions as part of the `Database` class in `tweets/database.py`. 
 There is a foreign key between `place_id` in the `tweets` and `matchedplaces` tables that link to the primary `id` entry in the `places` table. 
 
+## Data statement
+
+Source: Office for National Statistics licensed under the [Open Government Licence v.3.0](http://www.nationalarchives.gov.uk/doc/open-government-licence).  
+Contains OS data © Crown copyright and database right 2019.  
+This package uses [boundary data of Welsh Local Authorities](https://geoportal.statistics.gov.uk/datasets/local-authority-districts-december-2019-boundaries-uk-buc) (see `utils/la_keys.geojson`). 
