@@ -1,6 +1,5 @@
 retry
 geopandas
-sqlite3
 vaderSentiment
 schedule
 pandas

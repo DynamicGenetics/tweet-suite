@@ -24,7 +24,6 @@ setuptools.setup(
     install_requires=[
         "retry",
         "geopandas",
-        "sqlite3",
         "vaderSentiment",
         "schedule",
         "pandas",
