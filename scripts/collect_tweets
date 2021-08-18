@@ -23,5 +23,4 @@ if __name__ == "__main__":
         exit(-1)
 
     os.environ["SEARCHTWEETS_BEARER_TOKEN"] = args.search_tweets_token
-    print(f"SEARCHTWEETS_BEARER_TOKEN Variable set to: {os.environ.get('SEARCHTWEETS_BEARER_TOKEN')}")
     start_tweets_collection(args)
