@@ -1,10 +1,10 @@
-import setuptools
+from setuptools import setup, find_packages
 
 with open("README.md", "r", encoding="utf-8") as fh:
     long_description = fh.read()
 
-setuptools.setup(
-    name="tweet-suite",
+setup(
+    name="tweet_suite",
     version="1.1.3",
     author="Nina Di Cara, Alastair Tanner, Valerio Maggio",
     author_email="ninadicara@protonmail.com",
@@ -12,15 +12,16 @@ setuptools.setup(
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/ninadicara/tweet-suite",
+    include_package_data=True,
     project_urls={"Bug Tracker": "https://github.com/ninadicara/tweet-suite/issues",},
     classifiers=[
         "Programming Language :: Python :: 3",
         "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
         "Operating System :: OS Independent",
     ],
-    package_dir={"": "tweet-suite"},
-    packages=setuptools.find_packages(where="tweet-suite"),
-    python_requires=">=3.6",
+    scripts=["scripts/collect_tweets"],
+    packages=find_packages(exclude=[]),
+    python_requires=">=3.6,<3.10",
     install_requires=[
         "retry",
         "geopandas",
