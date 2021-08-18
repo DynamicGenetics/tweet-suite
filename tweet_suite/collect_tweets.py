@@ -12,9 +12,9 @@ import traceback
 from traceback import format_exc
 from argparse import ArgumentParser
 
-from utils.database import Database
-from utils.search import FullArchiveSearch
-from utils.geolocation import MatchPlaces
+from .utils.database import Database
+from .utils.search import FullArchiveSearch
+from .utils.geolocation import MatchPlaces
 
 # Set up logging
 logging.basicConfig(
@@ -71,21 +71,9 @@ def daily_job(db_location):
     db.write_matched_places(matched)
 
 
-if __name__ == "__main__":
-
-    # Define some arguments
-    parser = ArgumentParser()
-    parser.add_argument(
-        "-ct", "--run-collecter-at", dest="collector_time", type=str, default="09:00"
-    )
-    parser.add_argument(
-        "-o", "--db-location", type=str, default="phw_tweets.db", dest="db_location"
-    )
-    args = parser.parse_args()
-
+def start_tweets_collection(args):
     # Define a SafeScheduler object
     scheduler = SafeScheduler()
-
     try:
         scheduler.every().day.at(args.collector_time).do(daily_job, args.db_location)
 
@@ -107,3 +95,16 @@ if __name__ == "__main__":
         logger.critical(
             "Running script terminated. Traceback was {}".format(traceback.format_exc())
         )
+
+
+if __name__ == "__main__":
+    # Define some arguments
+    parser = ArgumentParser()
+    parser.add_argument(
+        "-ct", "--run-collecter-at", dest="collector_time", type=str, default="09:00"
+    )
+    parser.add_argument(
+        "-o", "--db-location", type=str, default="phw_tweets.db", dest="db_location"
+    )
+    args = parser.parse_args()
+    start_tweets_collection(args)
