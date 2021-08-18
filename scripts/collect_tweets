@@ -19,7 +19,7 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     if args.search_tweets_token is None:
-        print("SEARCH TWEETS TOKEN is missing, but it is reuired for this script to run!")
+        print("SEARCH TWEETS TOKEN is missing, but it is required for this script to run!")
         exit(-1)
 
     os.environ["SEARCHTWEETS_BEARER_TOKEN"] = args.search_tweets_token
