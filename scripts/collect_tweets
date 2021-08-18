@@ -1,0 +1,26 @@
+#!/usr/bin/env python
+
+# -*- coding: utf-8 -*-
+import os
+from tweet_suite import start_tweets_collection
+from argparse import ArgumentParser
+
+if __name__ == "__main__":
+    # Define some arguments
+    parser = ArgumentParser()
+    parser.add_argument(
+        "-ct", "--run-collecter-at", dest="collector_time", type=str, default="09:00"
+    )
+    parser.add_argument(
+        "-o", "--db-location", type=str, default="phw_tweets.db", dest="db_location"
+    )
+    parser.add_argument(
+        "-sk", "--search-key", type=str, default=None, dest="search_tweets_token")
+    args = parser.parse_args()
+
+    if args.search_tweets_token is None:
+        print("SEARCH TWEETS TOKEN is missing, but it is required for this script to run!")
+        exit(-1)
+
+    os.environ["SEARCHTWEETS_BEARER_TOKEN"] = args.search_tweets_token
+    start_tweets_collection(args)
