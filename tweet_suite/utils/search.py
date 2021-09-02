@@ -21,7 +21,7 @@ from datetime import datetime, timedelta
 
 logger = logging.getLogger(__name__)
 
-from utils.database import Database
+from .database import Database
 
 
 class FullArchiveSearch:
